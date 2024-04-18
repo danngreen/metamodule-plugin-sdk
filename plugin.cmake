@@ -50,6 +50,17 @@ function(create_plugin)
         -nostdlib
     )
 
+    set(LINK_LIBS_DIR ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/metamodule-plugin-libc/lib)
+    find_library(LIBCLIB "pluginc" PATHS ${LINK_LIBS_DIR} REQUIRED)
+    find_library(LIBMLIB "pluginm" PATHS ${LINK_LIBS_DIR} REQUIRED)
+    # find_library(LIBGLIB "pluging" PATHS ${LINK_LIBS_DIR} REQUIRED)
+    set(LINK_LIBS
+        -lpluginc
+        -lpluginm
+        # -lpluging
+        -L${LINK_LIBS_DIR}
+    )
+
 	# Link objects into a shared library (CMake won't do it for us)
     add_custom_command(
 		OUTPUT ${PLUGIN_FILE_FULL}
@@ -57,6 +68,7 @@ function(create_plugin)
 		COMMAND ${CMAKE_CXX_COMPILER} ${LFLAGS} -o ${PLUGIN_FILE_FULL}
 				$<TARGET_OBJECTS:${LIB_NAME}> 
                 $<TARGET_OBJECTS:metamodule-plugin-libc>
+                ${LINK_LIBS}
 		COMMAND_EXPAND_LISTS
 		VERBATIM USES_TERMINAL
     )
