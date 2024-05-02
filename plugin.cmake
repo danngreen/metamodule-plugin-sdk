@@ -68,15 +68,122 @@ function(create_plugin)
     get_target_property(LIBC_BIN_DIR metamodule-plugin-libc BINARY_DIR)
     find_library(LIBC_BIN_DIR "metamodule-plugin-libc" PATHS ${LIBC_BIN_DIR} REQUIRED)
 
+    get_target_property(LIBCPP_BIN_DIR libstdcpp98 BINARY_DIR)
+    find_library(LIBCPP_BIN_DIR "libstdcpp98" PATHS ${LIBCPP_BIN_DIR} REQUIRED)
+
 	# Link objects into a shared library (CMake won't do it for us)
     add_custom_command(
 		OUTPUT ${PLUGIN_FILE_FULL}
-		DEPENDS ${LIB_NAME}
+		DEPENDS ${LIB_NAME} libstdcpp98 libstdcpp11 libstdcpp17 libstdcpp20 metamodule-plugin-libc
 		COMMAND ${CMAKE_CXX_COMPILER} ${LFLAGS} -o ${PLUGIN_FILE_FULL}
 				$<TARGET_OBJECTS:${LIB_NAME}>  #FIXME: libraries linked to LIB_NAME target will not be included
+                -u__dso_handle
                 -L${LIBC_BIN_DIR} 
-                -lmetamodule-plugin-libc #FIXME: silently fails if this lib is not found
+                -L${LIBCPP_BIN_DIR} 
+                -Ur
+                -llibstdcpp20
+                -llibstdcpp17
+                -llibstdcpp11
+                -llibstdcpp98
+                #repeat this because it defines sso and cow shim, which libstdcpp98 needs
+                -llibstdcpp11 
+
+                -lmetamodule-plugin-libc
                 -lgcc
+ -Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EED2Ev
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EED2Ev
+ -Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EED0Ev
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE2fdEv
+ -Wl,--trace-symbol,_ZNSt8numpunctIcED2Ev
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE5closeEv
+ -Wl,--trace-symbol,_ZNSt8numpunctIwED0Ev
+ -Wl,--trace-symbol,_ZNKSt12__basic_fileIcE7is_openEv
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE8sys_openEiSt13_Ios_Openmode
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EED0Ev
+ -Wl,--trace-symbol,_ZNSt8numpunctIwED2Ev
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE4fileEv
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EE24_M_initialize_moneypunctEPiPKc
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE4fileEv
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EE24_M_initialize_moneypunctEPiPKc
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EE24_M_initialize_moneypunctEPiPKc
+ -Wl,--trace-symbol,__cxa_bad_cast
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE8xsputn_2EPKciS2_i
+ -Wl,--trace-symbol,_ZNSt8numpunctIcED1Ev
+ -Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EED2Ev
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE4openEPKcSt13_Ios_Openmodei
+ -Wl,--trace-symbol,_ZNSt8numpunctIwE22_M_initialize_numpunctEPi
+ -Wl,--trace-symbol,_jp2uc_l
+ -Wl,--trace-symbol,_ZNKSt7__cxx117collateIwE12_M_transformEPwPKwj
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EED2Ev
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcE8sys_openEP7__sFILESt13_Ios_Openmode
+ -Wl,--trace-symbol,_ZNKSt7collateIcE12_M_transformEPcPKcj
+ -Wl,--trace-symbol,_ZNSt12__basic_fileIcEC1EPi
+ -Wl,--trace-symbol,_ZNKSt7collateIwE12_M_transformEPwPKwj
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EED0Ev
+ -Wl,--trace-symbol,_ZNKSt7__cxx118messagesIwE6do_getEiiiRKNS_12basic_stringIwSt11char_traitsIwESaIwEEE
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EED1Ev
+ -Wl,--trace-symbol,_ZNKSt7collateIcE10_M_compareEPKcS2_
+ -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EED1Ev
+ -Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EE24_M_initialize_moneypunctEPiPKc
+-Wl,--trace-symbol,_uc2jp_l
+-Wl,--trace-symbol,_ZNKSt8messagesIcE6do_getEiiiRKSs
+-Wl,--trace-symbol,_ZSt18uncaught_exceptionv
+-Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EE24_M_initialize_moneypunctEPiPKc
+-Wl,--trace-symbol,_ZNKSt7__cxx117collateIwE10_M_compareEPKwS3_
+-Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EED1Ev
+-Wl,--trace-symbol,_ZSt17__verify_groupingPKcjRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+-Wl,--trace-symbol,_ZNKSt7__cxx117collateIcE12_M_transformEPcPKcj
+-Wl,--trace-symbol,_ZNSt8numpunctIwED1Ev
+-Wl,--trace-symbol,_ZNSt8numpunctIcE22_M_initialize_numpunctEPi
+-Wl,--trace-symbol,_ZNKSt7collateIwE10_M_compareEPKwS2_
+-Wl,--trace-symbol,_ZNSt12__basic_fileIcE7seekoffExSt12_Ios_Seekdir
+-Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EED1Ev
+-Wl,--trace-symbol,_ZNKSt7__cxx118messagesIcE6do_getEiiiRKNS_12basic_stringIcSt11char_traitsIcESaIcEEE
+-Wl,--trace-symbol,_ZNKSt7__cxx117collateIcE10_M_compareEPKcS3_
+-Wl,--trace-symbol,_ZNKSt8messagesIwE6do_getEiiiRKSbIwSt11char_traitsIwESaIwEE
+-Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EED0Ev
+-Wl,--trace-symbol,_ZNSt8numpunctIcED0Ev
+-Wl,--trace-symbol,_ZNSt12__basic_fileIcE6xsgetnEPci
+-Wl,--trace-symbol,_ZNSt12__basic_fileIcE9showmanycEv
+-Wl,--trace-symbol,_ZNSt12__basic_fileIcED1Ev
+-Wl,--trace-symbol,_ZNSt12__basic_fileIcE6xsputnEPKci
+# -Wl,--trace-symbol,_ZNKSt7collateIwE10_M_compareEPKwS2_
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EED0Ev
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EED1Ev
+# -Wl,--trace-symbol,_ZNKSt7collateIcE12_M_transformEPcPKcj
+# -Wl,--trace-symbol,_ZNKSt7collateIwE12_M_transformEPwPKwj
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EE24_M_initialize_moneypunctEPiPKc
+# -Wl,--trace-symbol,_jp2uc_l
+# -Wl,--trace-symbol,_ZSt18uncaught_exceptionv
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EE24_M_initialize_moneypunctEPiPKc
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EED0Ev
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EED0Ev
+# -Wl,--trace-symbol,_ZNSt8numpunctIwE22_M_initialize_numpunctEPi
+# -Wl,--trace-symbol,_ZNSt8numpunctIcE22_M_initialize_numpunctEPi
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EED2Ev
+# -Wl,--trace-symbol,_ZNSt13basic_istreamIwSt11char_traitsIwEE6ignoreEi
+# -Wl,--trace-symbol,__cxa_bad_cast
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EED1Ev
+# -Wl,--trace-symbol,_ZNSt8numpunctIwED1Ev
+# -Wl,--trace-symbol,_ZNKSt7collateIcE10_M_compareEPKcS2_
+# -Wl,--trace-symbol,_ZNSt8numpunctIcED0Ev
+# -Wl,--trace-symbol,_ZNSt8numpunctIcED2Ev
+# -Wl,--trace-symbol,_uc2jp_l
+# -Wl,--trace-symbol,_ZNKSt8messagesIcE6do_getEiiiRKSs
+# -Wl,--trace-symbol,_ZNSt8numpunctIcED1Ev
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EE24_M_initialize_moneypunctEPiPKc
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EED0Ev
+# -Wl,--trace-symbol,_ZNSt8numpunctIwED2Ev
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EED1Ev
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb1EE24_M_initialize_moneypunctEPiPKc
+# -Wl,--trace-symbol,_ZNSt10moneypunctIcLb0EED2Ev
+# -Wl,--trace-symbol,_ZNKSt8messagesIwE6do_getEiiiRKSbIwSt11char_traitsIwESaIwEE
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EED1Ev
+# -Wl,--trace-symbol,_ZNSt8numpunctIwED0Ev
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb1EED2Ev
+# -Wl,--trace-symbol,_ZNSt10moneypunctIwLb0EED2Ev
+
+
 		COMMAND_EXPAND_LISTS
 		VERBATIM USES_TERMINAL
     )
