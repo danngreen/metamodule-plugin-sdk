@@ -1,5 +1,15 @@
+_ITM_RU1
+_ITM_RU2
+_ITM_RU4
+_ITM_RU8
+_ITM_addUserCommitAction
+_ITM_memcpyRnWt
+_ITM_memcpyRtWn
 _Z12get_svg_sizeRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
 _Z12keep_symbolsv
+_ZGTtdlPv
+_ZGTtnaX
+_ZGTtnaj
 _ZN10MetaModule12make_elementEPKN4rack16componentlibrary5RoganENS_11BaseElementE
 _ZN10MetaModule12make_elementEPKN4rack3app10SliderKnobENS_11BaseElementE
 _ZN10MetaModule12make_elementEPKN4rack3app11ParamWidgetENS_11BaseElementE
@@ -383,6 +393,7 @@ __assert_func
 __atexit
 __atexit_recursive_mutex
 __cxa_pure_virtual
+__gnu_Unwind_Find_exidx
 _calloc_r
 _close_r
 _empty_func_stub

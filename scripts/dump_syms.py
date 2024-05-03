@@ -62,14 +62,22 @@ def GetLibcSymbols():
         "__aeabi_atexit",
         "__atexit_recursive_mutex",
 
-        "lseek",
         "_jp2uc_l",
-        "getentropy",
-        "fstat",
-        "read",
-        "write",
         "_uc2jp_l",
         "raise",
+
+        # "__gnu_Unwind_Find_exidx",
+        # "_ITM_RU1",
+        # "_ITM_RU2",
+        # "_ITM_RU4",
+        # "_ITM_RU8",
+        # "_ZGTtnaj",
+        # "_ZGTtnaX",
+        # "_ZGTtdlPv",
+        # "_ITM_memcpyRtWn",
+        # "_ITM_memcpyRnWt",
+        # "_ITM_addUserCommitAction",
+
 
     ]
     return libc_syms
