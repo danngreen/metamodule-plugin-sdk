@@ -16,7 +16,7 @@ def GetPluginRequiredSymbolNames(file):
             l = mmsyms.get_symbol(i)['st_info']['bind']
             t = mmsyms.get_symbol(i)['st_info']['type']
             ndx = mmsyms.get_symbol(i)['st_shndx']
-            if n != "" and l == "STB_GLOBAL" and ndx == 'SHN_UNDEF':
+            if n != "" and (l == "STB_GLOBAL" or l == "STB_WEAK") and ndx == 'SHN_UNDEF':
                 logging.debug(f"{i}: bind:{l} type:{t} {n}")
                 needed_syms.append(n)
     return needed_syms
