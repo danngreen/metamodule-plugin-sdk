@@ -396,6 +396,7 @@ _gettimeofday_r
 _impure_data
 _impure_ptr
 _isatty_r
+_jp2uc_l
 _kill_r
 _lseek_r
 _malloc_r
@@ -403,6 +404,7 @@ _open_r
 _read_r
 _realloc_r
 _sbrk_r
+_uc2jp_l
 _write_r
 abort
 calloc
@@ -419,6 +421,8 @@ costi
 do_deep_copy
 do_object_update_recursive
 free
+fstat
+getentropy
 gettimeofday
 glfwGetClipboardString
 glfwSetClipboardString
@@ -529,6 +533,7 @@ jsonp_strdup
 jsonp_stringn_nocheck_own
 jsonp_strndup
 jsonp_strtod
+lseek
 malloc
 memalign
 pffft_aligned_free
@@ -543,6 +548,8 @@ pffft_transform_internal
 pffft_transform_ordered
 pffft_zconvolve_accumulate
 pffft_zreorder
+raise
+read
 realloc
 rfftb
 rfftf
@@ -567,3 +574,4 @@ utf8_check_string
 utf8_encode
 utf8_iterate
 validate_pffft_simd
+write
