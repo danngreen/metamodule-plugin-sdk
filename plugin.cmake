@@ -55,8 +55,9 @@ function(create_plugin)
         ${ARCH_MP15x_A7_FLAGS}
     )
 
+    set(LINK_LIBS_DIR ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/metamodule-plugin-libc/lib)
+
     if (METAMODULE_PLUGIN_STATIC_LIBC)
-        set(LINK_LIBS_DIR ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/metamodule-plugin-libc/lib)
         find_library(LIBCLIB "pluginc" PATHS ${LINK_LIBS_DIR} REQUIRED)
         find_library(LIBMLIB "pluginm" PATHS ${LINK_LIBS_DIR} REQUIRED)
         set(LINK_STATIC_LIBC
@@ -75,8 +76,11 @@ function(create_plugin)
 		COMMAND ${CMAKE_CXX_COMPILER} ${LFLAGS} -o ${PLUGIN_FILE_FULL}
 				$<TARGET_OBJECTS:${LIB_NAME}>  #FIXME: libraries linked to LIB_NAME target will not be included
                 -L${LIBC_BIN_DIR} 
-                -lmetamodule-plugin-libc #FIXME: silently fails if this lib is not found
-                -lgcc
+                -L${LINK_LIBS_DIR} 
+                -lpluginstdc++
+                -lpluginsupc++
+                -lmetamodule-plugin-libc
+                -lplugingcc
 		COMMAND_EXPAND_LISTS
 		VERBATIM USES_TERMINAL
     )
